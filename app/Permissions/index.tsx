@@ -12,6 +12,9 @@ const PermissionsScreen = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+
+
+
       }}
     >
       <ThemedPressable onPress={requestLocationPermission}>
