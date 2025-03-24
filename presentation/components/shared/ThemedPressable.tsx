@@ -21,7 +21,7 @@ export default ThemedPressable;
 
 const styles = StyleSheet.create({
   btnPrimary: {
-    backgroundColor: 'black',
+    backgroundColor: 'blue',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 100,
