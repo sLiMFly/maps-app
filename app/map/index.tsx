@@ -1,12 +1,9 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-
-const PermissionsScreen = () => {
-    return (
-        <View>
-            <Text>PermissionsScreen</Text>
-        </View>
-    )
-}
-
-export default PermissionsScreen
+import { View, Text } from 'react-native';
+const MapScreen = () => {
+  return (
+    <View>
+      <Text>Map Screen</Text>
+    </View>
+  );
+};
+export default MapScreen;

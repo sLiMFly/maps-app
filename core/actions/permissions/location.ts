@@ -1,41 +1,50 @@
-import { PermissionStatus } from "@/infrastructure/interfaces/location";
-import * as Location from "expo-location";
+import { Alert, Linking } from 'react-native';
+import * as Location from 'expo-location';
+import { PermissionStatus } from '@/infrastructure/interfaces/location';
 
 export const requestLocationPermission =
   async (): Promise<PermissionStatus> => {
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        manualPermisionRequest();
-        return PermissionStatus.DENIED;
+    const { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== 'granted') {
+      if (status === 'denied') {
+        manualPermissionRequest();
       }
-      return PermissionStatus.GRANTED;
-    } catch (error) {
-      console.error("Error requesting location permission:", error);
-      return PermissionStatus.UNAVAILABLE;
+
+      return PermissionStatus.DENIED;
     }
+
+    return PermissionStatus.GRANTED;
   };
 
 export const checkLocationPermission = async () => {
+  const { status } = await Location.getForegroundPermissionsAsync();
+
   switch (status) {
-    case "granted":
+    case 'granted':
       return PermissionStatus.GRANTED;
-    case "denied":
+    case 'denied':
       return PermissionStatus.DENIED;
     default:
       return PermissionStatus.UNDETERMINED;
   }
 };
 
-const manualPermisionRequest = async () => {
-  // try {
-  //   const { status } = await Location.requestForegroundPermissionsAsync();
-  //   if (status === "granted") {
-  //     return true;
-  //   }
-  //   return false;
-  // } catch (error) {
-  //   console.error("Error requesting location permission:", error);
-  //   return false;
-  // }
+const manualPermissionRequest = async () => {
+  Alert.alert(
+    'Permiso de ubicación necesario',
+    'Para continuar debe de habilitar el permiso de location en los ajustes de la app',
+    [
+      {
+        text: 'Abrir ajustes',
+        onPress: () => {
+          Linking.openSettings();
+        },
+      },
+      {
+        text: 'Cancel',
+        style: 'destructive',
+      },
+    ]
+  );
 };
