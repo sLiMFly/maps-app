@@ -9,6 +9,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import { useColorScheme } from '@/presentation/hooks/useColorScheme';
 import PermissionsCheckerProvider from '@/presentation/providers/PermissionsCheckerProvider';
 
@@ -32,21 +34,24 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <PermissionsCheckerProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="loading/index" options={{ animation: 'none' }} />
-          <Stack.Screen name="map/index" options={{ animation: 'fade' }} />
-          <Stack.Screen
-            name="permissions/index"
-            options={{ animation: 'fade' }}
-          />
-        </Stack>
-      </PermissionsCheckerProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView>
+
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <PermissionsCheckerProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="loading/index" options={{ animation: 'none' }} />
+            <Stack.Screen name="map/index" options={{ animation: 'fade' }} />
+            <Stack.Screen
+              name="permissions/index"
+              options={{ animation: 'fade' }}
+            />
+          </Stack>
+        </PermissionsCheckerProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

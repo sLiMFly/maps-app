@@ -8,11 +8,11 @@ const MapScreen = () => {
       <MapView
         //showsPointsOfInterest={false}
         style={styles.map}
-        //36.388725, -6.208053 santi petri
+        //25.790749, -80.127265 miami beach
         //provider={PROVIDER_GOOGLE}
         initialRegion={{
-          latitude: 36.388725,
-          longitude: -6.208053,
+          latitude: 25.790749,
+          longitude: 80.127265,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -20,20 +20,20 @@ const MapScreen = () => {
 
         <Marker
           coordinate={{
-            latitude: 36.388725,
-            longitude: -6.208053,
+            latitude: 25.790749,
+            longitude: -80.127265,
           }}
-          title="Santi Petri"
-          description="Playa Santi Petri"
+          title="Miami Beach"
+          description="Miami Beach is a coastal resort city in Miami-Dade County, Florida, United States."
         />
 
         <Marker
           coordinate={{
-            latitude: 36.373594,
-            longitude: -6.188891,
+            latitude: 25.964729,
+            longitude: -80.118506,
           }}
-          title="Barrosa"
-          description="Playa La Barrosa"
+          title="Golden Beach"
+          description="Golden Beach is a town in Miami-Dade County, Florida, United States."
         />
 
       </MapView>
