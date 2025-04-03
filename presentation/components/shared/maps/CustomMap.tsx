@@ -1,7 +1,7 @@
 import { View, ViewProps, StyleSheet } from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { LatLng } from '@/infrastructure/interfaces/lat-lng';
-import MapView from 'react-native-maps';
+import MapView, { Polyline } from 'react-native-maps';
 import { useLocationStore } from '@/presentation/store/useLocationStore';
 import FBA from '../FBA';
 
@@ -11,10 +11,18 @@ interface Props extends ViewProps {
 }
 
 
-const CustomMap = ({ initialLocation, showUserLocation = true, ...rest }: Props) => {
+const CustomMap = ({
+    initialLocation,
+    showUserLocation = true,
+    ...rest
+}: Props) => {
 
     const mapRef = useRef<MapView>(null);
-    const { watchLocation, clearWatchLocation, lastKnownLocation } = useLocationStore();
+
+    const [isFollowingUser, setIsFollowingUser] = useState(true)
+    const [isShowPolyline, setIsShowPolyline] = useState(true)
+
+    const { watchLocation, clearWatchLocation, lastKnownLocation, getLocation, userLocationList } = useLocationStore();
 
     useEffect(() => {
         watchLocation();
@@ -25,10 +33,12 @@ const CustomMap = ({ initialLocation, showUserLocation = true, ...rest }: Props)
 
 
     useEffect(() => {
-        if (!lastKnownLocation) return;
-        moveCameraToLocation(initialLocation);
-    }, [lastKnownLocation])
+        if (lastKnownLocation && isFollowingUser) {
+            moveCameraToLocation(lastKnownLocation);
+        }
+    }, [lastKnownLocation,])
 
+    // useffect isShowPolyline
 
 
 
@@ -43,12 +53,26 @@ const CustomMap = ({ initialLocation, showUserLocation = true, ...rest }: Props)
     }
 
 
+    const moveToCurrentLocation = async () => {
+        if (!lastKnownLocation) {
+            moveCameraToLocation(initialLocation);
+        } else {
+            moveCameraToLocation(lastKnownLocation);
+        }
+        const location = await getLocation();
+        if (!location) return;
+
+        moveCameraToLocation(location);
+    }
+
+
 
     return (
         <View{...rest}>
             <MapView
                 ref={mapRef}
                 //showsPointsOfInterest={false}
+                onTouchStart={() => setIsFollowingUser(false)}
                 showsUserLocation={showUserLocation}
                 style={styles.map}
                 initialRegion={{
@@ -57,17 +81,48 @@ const CustomMap = ({ initialLocation, showUserLocation = true, ...rest }: Props)
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
-            />
+            >
 
+                {
+                    isShowPolyline &&
+                    <Polyline
+                        coordinates={userLocationList}
+                        strokeColor={'red'}
+                        strokeWidth={3}
+                    />
+                }
+
+
+
+            </MapView>
 
             <FBA
-                iconName="airplane-outline"
-                onPress={() => { }}
+                iconName={isShowPolyline ? 'eye-outline' : 'eye-off-outline'}
+                onPress={() => setIsShowPolyline(!isShowPolyline)}
+                style={{
+                    bottom: 140,
+                    right: 20,
+                }}
+            />
+
+            <FBA
+                iconName='compass-outline'
+                onPress={() => moveToCurrentLocation()}
                 style={{
                     bottom: 20,
                     right: 20,
                 }}
             />
+
+            <FBA
+                iconName={isFollowingUser ? 'walk-outline' : 'accessibility-outline'}
+                onPress={() => setIsFollowingUser(!isFollowingUser)}
+                style={{
+                    bottom: 80,
+                    right: 20,
+                }}
+            />
+
 
 
         </View>
