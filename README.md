@@ -32,3 +32,6 @@ You can start developing by editing the files inside the **app** directory. This
     <img src="./assets/images/map2.png" alt="Navigation App Screenshot" width="200"/>
     <img src="./assets/images/map3.png" alt="Navigation App Screenshot" width="200"/>
 </p>
+
+
+Ejercicio del curso de [Fernando Herrera](https://fernando-herrera.com/)
